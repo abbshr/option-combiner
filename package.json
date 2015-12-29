@@ -1,6 +1,6 @@
 {
   "name": "option-combiner",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "merge the config from different source",
   "main": "index.js",
   "scripts": {

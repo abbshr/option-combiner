@@ -4,7 +4,7 @@ class Combiner
 
   # generate merge series
   constructor: (src = []) ->
-    @_rules = []
+    @_rules = {}
     @_map = new Map
     @lst = for item in src
       switch
@@ -23,14 +23,14 @@ class Combiner
     , {}
 
     # O(mn)
-    @_applyRule lst, rule for rule in @_rules
+    @_applyRule lst, alias, ruleSet for alias, ruleSet of @_rules
     lst
 
   defineMapping: (relationship) ->
     Object.assign @_relation, newMapping for newMapping in relationship
     @_relation
 
-  defineRule: (@_rules = []) ->
+  defineRule: (@_rules = {}) ->
     this
 
   # apply rules in priority
@@ -38,8 +38,8 @@ class Combiner
   # rule => ['MYSQL_URL', 'DATABASE_URL', 'database.mysql.host']
   # if 'MYSQL_URL' exist, then 'DATABASE_URL' and 'database.mysql.host' will be ignored.
   # O(nm) → O(n)
-  _applyRule: (opts, rule) ->
-    rule.reduceRight (field, prioriField) =>
+  _applyRule: (opts, alias, rule) ->
+    field = rule.reduceRight (field, prioriField) =>
       if ret = @_parseRule prioriField, opts
         # use map cache to reduce the key-query-phrase in revoking.
         @_map.set prioriField, ret
@@ -48,25 +48,27 @@ class Combiner
       else
         field
 
+    if ref = @_map.get field
+      opts[alias] = ref[0][ref[1]]
+      @_revokeRule field, opts
+
   # e.g. 'database.mysql.host' => { database: { mysql: { host } } }
   # e.g. 'url' => 'url'
   # O(m) → O(1)
-  _parseRule: (field, opts, revoke = off, seperator = '.') =>
+  _parseRule: (field, opts, seperator = '.') =>
     idx = field.indexOf seperator
     if ~idx
       token = field[...idx]
       if token of opts
-        @_parseRule field[idx + 1..], opts[token], revoke, seperator
+        @_parseRule field[idx + 1..], opts[token], seperator
     else if field of opts
-      delete opts[field] if revoke
+      # delete opts[field] if revoke
       [opts, field]
 
   _revokeRule: (field, opts) =>
-    if ref = @_map.get field
+    if ref = @_map.get(field) ? @_parseRule field, opts
       delete ref[0][ref[1]]
       @_map.delete field
-    else
-      @_parseRule field, opts, on, '.'
 
 module.exports = (src) ->
   new Combiner src

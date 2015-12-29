@@ -39,20 +39,20 @@ src_c =
     g1: 'tt'
     g2: 'xx'
 
-ret = combiner [src_c, src_b, src_a]
-ret.defineRule [
-  ['b', 'e.e1.e11.e111', 'e.e1.e2.e3']
-  ['g.g1']
-]
+combiner [src_c, src_b, src_a]
+.defineRule
+  'three': ['b', 'e.e1.e11.e111', 'e.e1.e2.e3']
+  'two': ['d', 'g.g1']
 
-console.log ret.merge()
-# => { a: 3,
-  # b: 4,
-  # c: 5,
-  # d: 6,
-  # e: { e1: { e11: {}, e12: 5 }, e2: 8 },
-  # f: 'gg',
-  # g: { g2: 'xx' } }
+.merge()
+# =>
+# { a: 3,
+#   c: 5,
+#   e: { e1: { e11: {}, e12: 5 }, e2: 8 },
+#   f: 'gg',
+#   g: { g2: 'xx' },
+#   three: 4,
+#   two: 6 }
 ```
 
 API
@@ -104,15 +104,14 @@ Advanced Operation: `defineRule`
 combiner.defineRule rules
 ```
 
-+ `rules`: {Array(Array(String))}, define the map set to tell how combiner recognize the fields.
++ `rules`: {Object {alias: Array(String)}}, define the map set to tell how combiner recognize the fields.
 
 #### Rules
 Rules consist of lists which filter by groups. Groups are treated in the same priority. Each group contains the rules that have familiar semantic.
 
 ```coffee
-rules = [
-  ['MYSQL_URL', 'database.mysql.host'] # group one
-  ['MEMCACHED_PORT', 'cache.port'] # group two
-  ['ADDRESS', 'URL', 'appUrl'] # group three
-]
+rules =
+  alias1: ['MYSQL_URL', 'database.mysql.host'] # group one
+  alias2: ['MEMCACHED_PORT', 'cache.port'] # group two
+  alias3: ['ADDRESS', 'URL', 'appUrl'] # group three
 ```

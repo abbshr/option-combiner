@@ -1,0 +1,24 @@
+{
+  "name": "option-combiner",
+  "version": "0.0.1",
+  "description": "merge the config from different source",
+  "main": "index.coffee",
+  "scripts": {
+    "test": "mocha --compilers coffee:coffee-script/register test/"
+  },
+  "keywords": [
+    "merge",
+    "config",
+    "combine",
+    "option"
+  ],
+  "author": "ran <abbshrsoufii@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^2.3.4",
+    "should": "^8.0.2"
+  },
+  "dependencies": {
+    "coffee-script": "^1.10.0"
+  }
+}

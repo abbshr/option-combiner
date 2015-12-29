@@ -23,19 +23,61 @@ combiner().merge()
 API
 ---
 
+Class: `combiner`
+-----------------
+
 ```coffee
 # generate a combiner by a given list
 combiner optionsList
 ```
 
-+ `optionsList`: {Array}, default to be an empty array. Item can be object, alias (which pre-defined in `combiner.map`).
++ `optionsList`: {Array(String|Object)}, default to be an empty array. Item can be object, alias (which pre-defined in `combiner.map`).
   
-### Priority
+#### Priority
 options combined in series of how they have been defined.
+
+Basic Operation: `defineMapping`
+--------------------------------
+
+```coffee
+combiner.defineMapping relationship
+```
+
++ `relationship`: {Array(Object)}, extend mapping. 
+
+```coffee
+relationship = [
+  map_a: src1
+  map_b: src2
+]
+```
+
+Basic Operation: `merge`
+------------------------
 
 ```coffee
 combiner.merge optionsList, priori
 ```
 
-+ `optionsList`: {Array}, default to be an empty array. Item must be object.
-+ `priori`: {Boolean}, means whether overriding the option by this optionsList or not. Default to be `true`.
++ `optionsList`: {Array(Object)}, default to be an empty array. Item must be object.
++ `priori`: {Boolean}, means whether overriding the option by this optionsList or not. Default to be `false`.
+
+Advanced Operation: `defineRule`
+--------------------------------
+
+```coffee
+combiner.defineRule rules
+```
+
++ `rules`: {Array(Array(String))}, define the map set to tell how combiner recognize the fields.
+
+#### Rules
+Rules consist of lists which filter by groups. Groups are treated in the same priority. Each group contains the rules that have familiar semantic.
+
+```coffee
+rules = [
+  ['MYSQL_URL', 'database.mysql.host'] # group one
+  ['MEMCACHED_PORT', 'cache.port'] # group two
+  ['ADDRESS', 'URL', 'appUrl'] # group three
+]
+``` 

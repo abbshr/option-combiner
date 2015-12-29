@@ -2,7 +2,7 @@
   "name": "option-combiner",
   "version": "0.0.1",
   "description": "merge the config from different source",
-  "main": "index.coffee",
+  "main": "index.js",
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register test/"
   },

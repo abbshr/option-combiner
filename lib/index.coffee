@@ -1,12 +1,14 @@
 class Combiner
-  _map:
+  _relation:
     'env': process.env
 
   # generate merge series
   constructor: (src = []) ->
+    @_rules = []
+    @_map = new Map
     @lst = for item in src
       switch
-        when item of @_map then @_map[item]
+        when item of @_relation then @_relation[item]
         when typeof item is 'object' then item
         else continue
 
@@ -21,12 +23,12 @@ class Combiner
     , {}
 
     # O(mn)
-    @_applyRule lst, rule for rule in @_rules ?= []
+    @_applyRule lst, rule for rule in @_rules
     lst
 
   defineMapping: (relationship) ->
-    Object.assign @_map, newMapping for newMapping in relationship
-    @_map
+    Object.assign @_relation, newMapping for newMapping in relationship
+    @_relation
 
   defineRule: (@_rules = []) ->
     this
@@ -38,8 +40,9 @@ class Combiner
   # O(nm) → O(n)
   _applyRule: (opts, rule) ->
     rule.reduceRight (field, prioriField) =>
-      if @_parseRule prioriField, opts
-        # TODO: use map/set cache to reduce the key-query-phrase in revoking.
+      if ret = @_parseRule prioriField, opts
+        # use map cache to reduce the key-query-phrase in revoking.
+        @_map.set prioriField, ret
         @_revokeRule field, opts
         prioriField
       else
@@ -53,13 +56,17 @@ class Combiner
     if ~idx
       token = field[...idx]
       if token of opts
-        yes if @_parseRule field[idx + 1..], opts[token], revoke, seperator
+        @_parseRule field[idx + 1..], opts[token], revoke, seperator
     else if field of opts
       delete opts[field] if revoke
-      yes
+      [opts, field]
 
   _revokeRule: (field, opts) =>
-    @_parseRule field, opts, on, '.'
+    if ref = @_map.get field
+      delete ref[0][ref[1]]
+      @_map.delete field
+    else
+      @_parseRule field, opts, on, '.'
 
 module.exports = (src) ->
   new Combiner src

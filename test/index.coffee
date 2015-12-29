@@ -29,7 +29,7 @@ src_c =
 ret = combiner [src_c, src_b, src_a]
 ret.defineRule [
   ['b', 'e.e1.e11.e111', 'e.e1.e2.e3']
-  ['g.g1']
+  ['d', 'g.g1']
 ]
 # ret.merge()
 console.log ret.merge()

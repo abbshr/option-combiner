@@ -15,9 +15,44 @@ combiner ['env', github: 'abbshr', gitlab: 'Lorem Ipsum', configFile]
 
 # => { ... }
 
-combiner().merge()
+src_a =
+  a: 1
+  b: 2
+  c: 3
+  d: 4
 
-# => {}
+src_b =
+  a: 3
+  b: 4
+  c: 5
+  d: 6
+
+src_c =
+  e:
+    e1:
+      e11:
+        e111: 6
+      e12: 5
+    e2: 8
+  f: 'gg'
+  g:
+    g1: 'tt'
+    g2: 'xx'
+
+ret = combiner [src_c, src_b, src_a]
+ret.defineRule [
+  ['b', 'e.e1.e11.e111', 'e.e1.e2.e3']
+  ['g.g1']
+]
+
+console.log ret.merge()
+# => { a: 3,
+  # b: 4,
+  # c: 5,
+  # d: 6,
+  # e: { e1: { e11: {}, e12: 5 }, e2: 8 },
+  # f: 'gg',
+  # g: { g2: 'xx' } }
 ```
 
 API
@@ -32,7 +67,7 @@ combiner optionsList
 ```
 
 + `optionsList`: {Array(String|Object)}, default to be an empty array. Item can be object, alias (which pre-defined in `combiner.map`).
-  
+
 #### Priority
 options combined in series of how they have been defined.
 
@@ -43,7 +78,7 @@ Basic Operation: `defineMapping`
 combiner.defineMapping relationship
 ```
 
-+ `relationship`: {Array(Object)}, extend mapping. 
++ `relationship`: {Array(Object)}, extend mapping.
 
 ```coffee
 relationship = [
@@ -80,4 +115,4 @@ rules = [
   ['MEMCACHED_PORT', 'cache.port'] # group two
   ['ADDRESS', 'URL', 'appUrl'] # group three
 ]
-``` 
+```

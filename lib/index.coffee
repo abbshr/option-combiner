@@ -51,9 +51,18 @@ class Combiner
     if ref = @_retrieveRef field, opts
       val = ref[0][ref[1]]
       @_revokeRule field, opts
-      opts[alias] = val
+      @_makeAlias alias, val, opts
     else
 
+  _makeAlias: (alias, val, opts, seperator = '.') =>
+    idx = alias.indexOf seperator
+    if ~idx
+      token = alias[...idx]
+      opts[token] = {} unless typeof opts[token] is 'object'
+
+      @_makeAlias alias[idx + 1..], val, opts[token], seperator
+    else
+      opts[alias] = val
   # e.g. 'database.mysql.host' => { database: { mysql: { host } } }
   # e.g. 'url' => 'url'
   # O(m) → O(1)

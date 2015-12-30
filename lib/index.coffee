@@ -52,7 +52,6 @@ class Combiner
       val = ref[0][ref[1]]
       @_revokeRule field, opts
       @_makeAlias alias, val, opts
-    else
 
   _makeAlias: (alias, val, opts, seperator = '.') =>
     idx = alias.indexOf seperator

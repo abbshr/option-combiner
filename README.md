@@ -115,3 +115,18 @@ rules =
   alias2: ['MEMCACHED_PORT', 'cache.port'] # group two
   alias3: ['ADDRESS', 'URL', 'appUrl'] # group three
 ```
+
+#### Alias
+
+alias is the name of the ruleset-group, which will be inserted into the final option. alias can be written in `chain mode`:
+
+```coffee
+rules =
+  'mysql.host': ['MYSQL_URL', 'database.mysql.host']
+
+# options =>
+# mysql:
+#   host: 'xxx'
+```
+
+this will create the embed sstruct in the final option object.

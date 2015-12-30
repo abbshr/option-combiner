@@ -26,7 +26,7 @@ src_c =
 
 ret = combiner [src_c, src_b, src_a]
 ret.defineRule
-  'a.g.h': ['v.g.h', 'a', 'e.e1.e11.e111']
+  'e': ['v.g.h', 'a', 'e.e1.e11.e111']
   'two': ['h', 'g.g1']
 
 console.log ret.merge()

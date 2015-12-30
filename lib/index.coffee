@@ -48,9 +48,10 @@ class Combiner
       else
         field
 
-    if ref = @_map.get field
+    if ref = @_retrieveRef field, opts
       opts[alias] = ref[0][ref[1]]
       @_revokeRule field, opts
+    else
 
   # e.g. 'database.mysql.host' => { database: { mysql: { host } } }
   # e.g. 'url' => 'url'
@@ -65,8 +66,11 @@ class Combiner
       # delete opts[field] if revoke
       [opts, field]
 
-  _revokeRule: (field, opts) =>
-    if ref = @_map.get(field) ? @_parseRule field, opts
+  _retrieveRef: (field, opts) ->
+    @_map.get(field) ? @_parseRule field, opts
+
+  _revokeRule: (field, opts) ->
+    if ref = @_retrieveRef field, opts
       delete ref[0][ref[1]]
       @_map.delete field
 

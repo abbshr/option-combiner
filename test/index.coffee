@@ -24,9 +24,10 @@ src_c =
     g1: 'tt'
     g2: 'xx'
 
+console.log src_c
 ret = combiner [src_c, src_b, src_a]
 ret.defineRule
-  'three': ['b', 'e.e1.e11.e111', 'e.e1.e2.e3']
-  'two': ['d', 'g.g1']
+  'three': ['v', 'e.e1.e11.e111']
+  'two': ['h', 'g.g1']
 
 console.log ret.merge()

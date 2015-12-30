@@ -49,8 +49,9 @@ class Combiner
         field
 
     if ref = @_retrieveRef field, opts
-      opts[alias] = ref[0][ref[1]]
+      val = ref[0][ref[1]]
       @_revokeRule field, opts
+      opts[alias] = val
     else
 
   # e.g. 'database.mysql.host' => { database: { mysql: { host } } }

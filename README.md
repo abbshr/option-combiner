@@ -8,9 +8,8 @@ Usage
 
 ```coffee
 combiner = require 'option-combiner'
-configFile = require './conf/config'
 
-combiner ['env', github: 'abbshr', gitlab: 'Lorem Ipsum', configFile]
+combiner ['env', github: 'abbshr', gitlab: 'Lorem Ipsum', './conf/config']
 .merge [PWD: '/root'], no
 
 # => { ... }
@@ -66,7 +65,18 @@ Class: `combiner`
 combiner optionsList
 ```
 
-+ `optionsList`: {Array(String|Object)}, default to be an empty array. Item can be object, alias (which pre-defined in `combiner.map`).
++ `optionsList`: {Array(Alias|Object|Path)}, default to be an empty array. Item can be object, alias (which pre-defined in `'lib/relation-resolver.coffee'`), or a path, if the path is a relative path, it relative to `__dirname`.
+
+```coffee
+optionsList = [
+  'env'
+  '../package.json'
+  './config.test.js'
+  './config.product.js'
+  './config.sample.js'
+  github: 'abbshr', gitlab: 'Lorem Ipsum'
+]
+```
 
 #### Priority
 options combined in series of how they have been defined.

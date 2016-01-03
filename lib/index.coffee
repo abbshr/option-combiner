@@ -1,5 +1,5 @@
 Rule = require './rule'
-{resolve, relation} = require './relation-resolver'
+{resolve, relation, setDirname} = require './relation-resolver'
 
 class Combiner extends Rule
 
@@ -29,5 +29,7 @@ class Combiner extends Rule
   defineRule: (@_rules = {}) ->
     this
 
-module.exports = (srcs) ->
-  new Combiner srcs
+module.exports = (dirname = __dirname) ->
+  setDirname dirname
+  (srcs) ->
+    new Combiner srcs

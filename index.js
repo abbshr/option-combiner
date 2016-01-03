@@ -1,2 +1,3 @@
 require('coffee-script/register');
-module.exports = require('./lib');
+var dirname = require('path').dirname(module.parent.filename);
+module.exports = require('./lib')(dirname);

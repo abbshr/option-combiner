@@ -1,5 +1,5 @@
 Rule = require './rule'
-{resolve, relation} = require './src-resolver'
+{resolve, relation} = require './relation-resolver'
 
 class Combiner extends Rule
 
